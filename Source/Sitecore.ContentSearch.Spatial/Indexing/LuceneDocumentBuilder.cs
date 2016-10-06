@@ -18,6 +18,7 @@ using Sitecore.Configuration;
 using Sitecore.Diagnostics;
 using Sitecore.ContentSearch.Spatial.Configurations;
 using System.Xml;
+using Lucene.Net.Spatial.BBox;
 using Sitecore.Xml;
 
 namespace Sitecore.ContentSearch.Spatial.Indexing
@@ -113,8 +114,28 @@ namespace Sitecore.ContentSearch.Spatial.Indexing
                     pointFields.Add(f);
                 }
             }
+
+	        var bounds = AddBounds(ctx, lng, lat);
+			pointFields.AddRange(bounds);
+
             return pointFields;
         }
+
+		private static List<IFieldable> AddBounds(SpatialContext ctx, double lng, double lat)
+	    {
+			SpatialPrefixTree grid = new GeohashPrefixTree(ctx, 11);
+			var strategy = new RecursivePrefixTreeStrategy(grid, Sitecore.ContentSearch.Spatial.Common.Constants.LocationFieldName);
+			List<IFieldable> pointFields = new List<IFieldable>();
+			Point shape = ctx.MakePoint(lng, lat);
+			foreach (var f in strategy.CreateIndexableFields(shape))
+			{
+				if (f != null)
+				{
+					pointFields.Add(f);
+				}
+			}
+			return pointFields;
+	    }
 
         private void BuildSettings()
         {

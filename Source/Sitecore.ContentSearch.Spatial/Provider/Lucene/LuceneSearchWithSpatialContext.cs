@@ -22,15 +22,6 @@ namespace Sitecore.ContentSearch.Spatial.Provider.Lucene
      
         private  IContentSearchConfigurationSettings settings;
 
-
-        protected LuceneSearchWithSpatialContext(ILuceneProviderIndex index, CreateSearcherOption options = CreateSearcherOption.Writeable, SearchSecurityOptions securityOptions = SearchSecurityOptions.EnableSecurityCheck)
-            :base(index,options,securityOptions)
-        {
-            Assert.ArgumentNotNull(index, "index");
-            this.index = index;
-            this.settings = this.index.Locator.GetInstance<IContentSearchConfigurationSettings>();
-        }
-
         public LuceneSearchWithSpatialContext(ILuceneProviderIndex index, SearchSecurityOptions securityOptions = SearchSecurityOptions.EnableSecurityCheck)
             :base(index,securityOptions)
         {

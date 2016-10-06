@@ -61,7 +61,8 @@ namespace Sitecore.ContentSearch.Spatial.Parsing
             {
                 case "WithinRadius":
                     return VisitWithinRadiusMethod(methodCall);
-
+				case "WithinBounds":
+					return VisitWithinBoundsMethod(methodCall);
             }
             throw new NotSupportedException(string.Format("Unsupported extension method: {0}.", methodCall.Method.Name));
         }
@@ -79,6 +80,24 @@ namespace Sitecore.ContentSearch.Spatial.Parsing
             object radiusValue = this.GetConstantValue<object>(nodeRadius);
             return new WithinRadiusNode(fieldKey, latitudeValue, longitudeValue, radiusValue);
         }
+
+		protected QueryNode VisitWithinBoundsMethod(MethodCallExpression methodCall)
+		{
+
+			string fieldKey = this.MapPropertyToField(((MemberExpression)methodCall.Object).Member);
+
+			QueryNode nodeMinLatitude = this.Visit(this.GetArgument(methodCall.Arguments, 0));
+			QueryNode nodeMinLongitude = this.Visit(this.GetArgument(methodCall.Arguments, 1));
+			QueryNode nodeMaxLatitude = this.Visit(this.GetArgument(methodCall.Arguments, 2));
+			QueryNode nodeMaxLongitude = this.Visit(this.GetArgument(methodCall.Arguments, 3));
+
+			object minLatitudeValue = this.GetConstantValue<object>(nodeMinLatitude);
+			object minLongitudeValue = this.GetConstantValue<object>(nodeMinLongitude);
+			object maxLatitudeValue = this.GetConstantValue<object>(nodeMaxLatitude);
+			object maxLongitudeValue = this.GetConstantValue<object>(nodeMaxLongitude);
+
+			return new WithinBoundsNode(fieldKey, minLatitudeValue, minLongitudeValue, maxLatitudeValue, maxLongitudeValue);
+		}
 
         private T GetConstantValue<T>(QueryNode node)
         {

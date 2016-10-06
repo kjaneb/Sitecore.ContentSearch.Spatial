@@ -30,5 +30,9 @@ namespace Sitecore.ContentSearch.Spatial.SearchTypes
             return true;
         }
 
+	    public bool WithinBounds(double minLatitude, double minLogitude, double maxLatitude, double maxLogitude)
+	    {
+		    return true;
+	    }
     }
 }

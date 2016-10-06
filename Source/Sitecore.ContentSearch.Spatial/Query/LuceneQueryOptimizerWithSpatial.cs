@@ -17,13 +17,20 @@ namespace Sitecore.ContentSearch.Spatial.Query
     {
         protected override Sitecore.ContentSearch.Linq.Nodes.QueryNode Visit(Sitecore.ContentSearch.Linq.Nodes.QueryNode node, LuceneQueryOptimizerState state)
         {
-            var withinRadiusNode = node as WithinRadiusNode;
-            if (withinRadiusNode != null)
-            {
-                return VisitWithinRadius(withinRadiusNode, state);
-            }
-            else
-                return base.Visit(node, state);
+			if (node is WithinRadiusNode)
+			{
+				var withinRadiusNode = node as WithinRadiusNode;
+
+				return VisitWithinRadius(withinRadiusNode, state);
+			}
+			else if (node is WithinBoundsNode)
+			{
+				var withinBoundsNode = node as WithinBoundsNode;
+
+				return VisitWithinBounds(withinBoundsNode, state);
+			}
+			else
+				return base.Visit(node, state);
         }
 
 
@@ -31,5 +38,10 @@ namespace Sitecore.ContentSearch.Spatial.Query
         {
             return new WithinRadiusNode(node.Field, node.Latitude, node.Longitude, node.Radius, mappingState.Boost);
         }
+
+		protected virtual Sitecore.ContentSearch.Linq.Nodes.QueryNode VisitWithinBounds(WithinBoundsNode node, LuceneQueryOptimizerState mappingState)
+		{
+			return new WithinBoundsNode(node.Field, node.MinLatitude, node.MinLongitude, node.MaxLatitude, node.MaxLongitude, mappingState.Boost);
+		}
     }
 }

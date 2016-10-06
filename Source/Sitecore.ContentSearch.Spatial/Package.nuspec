@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <authors>kellyb</authors>
+    <owners>kellyb</owners>
+    <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
+    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
+    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Package description</description>
+    <copyright>Copyright 2016</copyright>
+  </metadata>
+	<files>
+	  <file src="bin\$configuration$\Sitecore.ContentSearch.Spatial.dll" target="lib" /> 
+	  <file src="bin\$configuration$\Lucene.Net.Contrib.Spatial.dll" target="lib" />
+	  <file src="bin\$configuration$\Lucene.Net.dll" target="lib" />
+	  <file src="bin\$configuration$\Spatial4n.Core.dll" target="lib" />
+	</files>
+</package>
